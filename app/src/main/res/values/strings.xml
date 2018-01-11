@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SaveFileDemo</string>
+    <string name="transition_share">transitionShare</string>
+</resources>

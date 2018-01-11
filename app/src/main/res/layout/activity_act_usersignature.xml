@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.example.admin.savefiledemo.views.SignaturePngView
+        android:id="@+id/signature_png_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btn_clean_all"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:text="清屏" />
+        <Button
+            android:id="@+id/btn_save_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:text="保存" />
+    </LinearLayout>
+</RelativeLayout>

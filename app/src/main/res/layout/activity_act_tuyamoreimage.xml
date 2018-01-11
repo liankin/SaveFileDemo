@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/image"
+    android:id="@+id/layout_move_image">
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBule"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_image_index"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="#e45a5a"
+            android:text="当前" />
+        <TextView
+            android:id="@+id/btn_paint_style"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="画笔样式" />
+        <TextView
+            android:id="@+id/btn_paint"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="画笔" />
+        <TextView
+            android:id="@+id/btn_clear_all"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="清屏" />
+        <TextView
+            android:id="@+id/btn_revocation"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="撤销" />
+        <TextView
+            android:id="@+id/btn_add_image"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="贴图" />
+        <TextView
+            android:id="@+id/btn_save"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="保存照片" />
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/btn_previous_image"
+        android:scaleType="centerInside"
+        android:layout_centerVertical="true"
+        android:elevation="10dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/btn_oval"
+        android:src="@drawable/ic_lost_page"
+        android:textColor="#ffffff"/>
+    <ImageView
+        android:id="@+id/btn_next_image"
+        android:scaleType="centerInside"
+        android:layout_centerVertical="true"
+        android:elevation="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/btn_oval"
+        android:src="@drawable/ic_next_page"
+        android:textColor="#ffffff"/>
+</RelativeLayout>

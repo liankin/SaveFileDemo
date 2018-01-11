@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:innerRadius="35dp"
+    android:shape="ring"
+    android:thickness="10dp"
+    android:useLevel="false">
+    <!-- innerRadius圆圈的半径  thickness环的厚度 -->
+    <!-- gradient颜色渐变 -->
+    <gradient android:angle="0"
+        android:startColor="@color/colorAccent"
+        android:centerColor="@color/colorBule"
+        android:endColor="@color/colorPink"
+        android:useLevel="false"
+        android:type="sweep"/>
+</shape>

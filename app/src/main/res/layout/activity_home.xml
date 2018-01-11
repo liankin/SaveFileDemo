@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:layout_margin="10dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_view"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"/>
+            <Button
+                android:id="@+id/btn_user_signature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="个人签名"/>
+
+            <Button
+                android:id="@+id/btn_download_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="下载图片"/>
+
+            <Button
+                android:id="@+id/btn_image_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="图片列表"/>
+
+            <Button
+                android:id="@+id/btn_image_operation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="操作image_File"/>
+
+            <Button
+                android:id="@+id/btn_file_operation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="操作text_File"/>
+            <Button
+                android:id="@+id/btn_move_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="#ed6cc7"
+                android:text="移动图片"/>
+            <Button
+                android:id="@+id/btn_tu_ya_more_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="#4289de"
+                android:text="涂鸦多张图片"/>
+            <Button
+                android:id="@+id/btn_graffti_more_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="#4289de"
+                android:text="涂鸦多张图片(graffti)"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
