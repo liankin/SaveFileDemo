@@ -308,9 +308,8 @@ public class TuYaMoreView extends View {
     /**
      * 保存涂鸦结果图片
      */
-    public void saveResultImage(){
-        File sdDir = Environment.getExternalStorageDirectory();
-        File fileDir = new File(sdDir.getPath() + "/SAVEFILEDEMO/TUYA/测试涂鸦");//创建文件夹
+    public void saveResultImage(String saveFileDirPath){
+        File fileDir = new File(saveFileDirPath);//创建文件夹
         if (!fileDir.exists()) {
             fileDir.mkdir();
         }

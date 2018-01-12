@@ -216,17 +216,9 @@ public class TuyaView extends View {
     /**
      * 保存涂鸦结果图片
      */
-    public void saveResultImage(){
-        File sdDir = Environment.getExternalStorageDirectory();
-        File fileDir = new File(sdDir.getPath() + "/SAVEFILEDEMO/TUYA");
-        if (!fileDir.exists()) {
-            // 必须要先有父文件夹才能在父文件夹下建立想要的子文件夹
-            // 即LIMS文件必须存在，才能建立IMG文件夹
-            fileDir.mkdir();
-        }
-        String fileUrl = fileDir.getAbsolutePath() + "/测试涂鸦.jpg";
+    public void saveResultImage(String path){
         try {
-            FileOutputStream fos = new FileOutputStream(new File(fileUrl));
+            FileOutputStream fos = new FileOutputStream(new File(path));
             mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();

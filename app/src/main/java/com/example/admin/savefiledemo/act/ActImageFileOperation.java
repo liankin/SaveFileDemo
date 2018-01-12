@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.example.admin.savefiledemo.Constant;
 import com.example.admin.savefiledemo.util.FileUtil;
 import com.example.admin.savefiledemo.R;
 import com.example.admin.savefiledemo.util.ToastUtil;
@@ -59,8 +60,7 @@ public class ActImageFileOperation extends AppCompatActivity {
     private List<File> filesList = new ArrayList<>();//文件夹里的所有文件
     private ImageListAdapter imageListAdapter;
 
-    private static final File SD_DIR = Environment.getExternalStorageDirectory();
-    private static final File FILES_DIR = new File(SD_DIR.getPath() + "/SAVEFILEDEMO/IMG");//文件保存路径
+    private static final File FILES_DIR = Constant.getFileDir(Constant.IMAGE_FILE_PATH);//文件保存路径
 
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,

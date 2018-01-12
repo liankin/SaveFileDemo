@@ -12,7 +12,10 @@ import android.view.View;
  * 涂鸦参数
  */
 public class GraffitiParams implements Parcelable {
-
+    /**
+     * 签名路径
+     */
+    public String mSignPath;
     /**
      * 图片路径
      */
@@ -75,6 +78,7 @@ public class GraffitiParams implements Parcelable {
         @Override
         public GraffitiParams createFromParcel(Parcel in) {
             GraffitiParams params = new GraffitiParams();
+            params.mSignPath = in.readString();
             params.mTitleName = in.readString();
             params.mImagePath = in.readString();
             params.mSavePath = in.readString();
@@ -98,6 +102,7 @@ public class GraffitiParams implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mSignPath);
         dest.writeString(mTitleName);
         dest.writeString(mImagePath);
         dest.writeString(mSavePath);

@@ -72,17 +72,7 @@
                             android:textSize="16sp"
                             android:visibility="visible" />
 
-                        <Button
-                            android:id="@+id/btn_pen_bitmap"
-                            android:layout_width="50dp"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="10dp"
-                            android:background="@drawable/graffiti_btn_effect_round"
-                            android:scaleType="centerCrop"
-                            android:text="贴图"
-                            android:textColor="#000000"
-                            android:textSize="16sp"
-                            android:visibility="visible" />
+
 
                     </LinearLayout>
 
@@ -264,10 +254,10 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_alignParentTop="true"
                 android:id="@+id/graffiti_selectable_edit_container"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/title_bar_height"
-                android:layout_above="@+id/graffiti_edit_container"
                 android:background="#88000000"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -380,7 +370,17 @@
                         android:scaleType="centerInside"
                         android:src="@drawable/ic_btn_eraser"
                         android:visibility="visible" />
-
+                    <Button
+                        android:id="@+id/btn_pen_bitmap"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/graffiti_btn_effect_round"
+                        android:scaleType="centerCrop"
+                        android:text="签名"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:visibility="visible" />
                     <ImageView
                         android:layout_marginLeft="30dp"
                         android:id="@+id/btn_undo"
@@ -413,11 +413,16 @@
 
 
                 </LinearLayout>
+                <RelativeLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <LinearLayout
+                    android:visibility="visible"
+                    android:id="@+id/layout_pen_size"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
                     <RelativeLayout
@@ -455,8 +460,47 @@
                         android:minWidth="40dp"
                         android:textColor="#fff"
                         android:textStyle="bold"
-                        android:textSize="19sp" />
+                        android:textSize="18dp" />
                 </LinearLayout>
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/layout_sign_size"
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:textColor="#fff"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="签名尺寸"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        />
+                    <SeekBar
+                        android:id="@+id/sign_size"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:max="100"
+                        android:maxHeight="8dp"
+                        android:minHeight="8dp"
+                        android:paddingLeft="12dp"
+                        android:progressDrawable="@drawable/bg_seekbar"
+                        android:thumb="@drawable/seekbar_thumb"
+                        android:thumbOffset="0dp" />
+                    <TextView
+                        android:id="@+id/sign_size_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
+                        android:minWidth="40dp"
+                        android:textColor="#fff"
+                        android:textStyle="bold"
+                        android:textSize="18dp" />
+                </LinearLayout>
+                </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
 

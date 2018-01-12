@@ -1,6 +1,8 @@
 package com.example.admin.savefiledemo.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +12,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
+import com.example.admin.savefiledemo.Constant;
 import com.example.admin.savefiledemo.R;
+import com.example.admin.savefiledemo.act.ActBigImage;
+import com.example.admin.savefiledemo.mode.ChooseFileMode;
 
 import java.io.File;
 
@@ -48,6 +53,21 @@ public class GraffityImageAdapter extends BaseAdapter<File> {
                     .into(holder.itemImage);
             holder.itemName.setText(item.getName());
         }
+        holder.itemImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ChooseFileMode chooseFileMode = new ChooseFileMode();
+                chooseFileMode.setFile(item);
+                chooseFileMode.setOperation(4);
+
+                Intent intent = new Intent();
+                intent.setClass(mContext, ActBigImage.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Constant.DATA, chooseFileMode);
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
+            }
+        });
         return convertView;
     }
 

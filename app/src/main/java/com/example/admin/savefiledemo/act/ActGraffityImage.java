@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.admin.savefiledemo.Constant;
 import com.example.admin.savefiledemo.R;
 import com.example.admin.savefiledemo.adapter.GraffityImageAdapter;
 import com.example.admin.savefiledemo.util.FileUtil;
@@ -39,17 +40,16 @@ public class ActGraffityImage extends AppCompatActivity {
     @BindView(R.id.tv_open_graffity)
     TextView tvOpenGraffity;
     @BindView(R.id.list_view)
-    ListView listView;
-    @BindView(R.id.img_result)
-    ImageView imgResult;
+    ListView listView;//显示结果图
 
     private List<File> readFilesList = new ArrayList<>();
     private List<File> saveFilesList = new ArrayList<>();
     private GraffityImageAdapter imageListAdapter;
 
-    private static final File SD_DIR = Environment.getExternalStorageDirectory();
-    private static final File READ_FILES_DIR = new File(SD_DIR.getPath() + "/SAVEFILEDEMO/GRAFFITY/测试图片");
-    private static final File SAVE_FILES_DIR = new File(SD_DIR.getPath() + "/SAVEFILEDEMO/GRAFFITY/涂鸦结果");
+    private static final File READ_FILES_DIR = Constant.getFileDir(Constant.GRAFFITY_SRC_FILE_PATH);
+    private static final File SAVE_FILES_DIR = Constant.getFileDir(Constant.GRAFFITY_DES_FILE_PATH);
+    private static final String signatureImagePath = Constant.getFileDir(Constant.SIGNAYURE_FILE_PATH).getAbsolutePath()
+            +"/" + Constant.SIGNATURE_FILE_NAME;
     public static final int REQUEST_GRAFFITI = 22;
 
     @Override
@@ -65,12 +65,13 @@ public class ActGraffityImage extends AppCompatActivity {
         }
         imageListAdapter = new GraffityImageAdapter(ActGraffityImage.this);
         listView.setAdapter(imageListAdapter);
-        imageListAdapter.initData(0, saveFilesList);
+
         getReadFilesList();
+        getSaveFilesList();
     }
 
     /**
-     * 读取指定文件夹里的所有文件
+     * 读取原图
      */
     public void getReadFilesList() {
         if (readFilesList != null) {
@@ -78,12 +79,24 @@ public class ActGraffityImage extends AppCompatActivity {
         }
         readFilesList.addAll(FileUtil.getFiles(READ_FILES_DIR));
         if (readFilesList == null || readFilesList.size() == 0) {
-            ToastUtil.showMessage("暂无任何文件");
+            ToastUtil.showMessage("暂无任何原图");
             return;
         }
-//        Bitmap bitmap = ImageUtil.createBitmapFromPath(readFilesList.get(0).getAbsolutePath(), 1920, 1080);
-//        imgResult.setImageBitmap(bitmap);
-//        Toast.makeText(this,"读取涂鸦原图",Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 读取结果图
+     */
+    public void getSaveFilesList(){
+        if (saveFilesList != null) {
+            saveFilesList.clear();
+        }
+        saveFilesList.addAll(FileUtil.getFiles(SAVE_FILES_DIR));
+        if (saveFilesList == null || saveFilesList.size() == 0) {
+            ToastUtil.showMessage("暂无任何结果图");
+            return;
+        }
+        imageListAdapter.initData(0, saveFilesList);
     }
 
     public void openGraffity() {
@@ -91,9 +104,10 @@ public class ActGraffityImage extends AppCompatActivity {
         GraffitiParams params = new GraffitiParams();
         // 图片路径
         params.mImagePath = READ_FILES_DIR.getAbsolutePath();
-        params.mSavePath = SAVE_FILES_DIR.getAbsolutePath(); //设置涂鸦后的图片保存的路径
+        params.mSignPath = signatureImagePath;
         params.mTitleName = "测试图片";
         params.mAmplifierScale = 0;
+        params.mSavePath = SAVE_FILES_DIR.getAbsolutePath(); //设置涂鸦后的图片保存的路径
         params.mSavePathIsDir = true;
         params.mPaintSize = 2;//设置初始笔的大小
         params.mIsFullScreen = true; //图片充满全屏
@@ -124,19 +138,7 @@ public class ActGraffityImage extends AppCompatActivity {
                 if (StringUtil.isEmpty(savePaths)) {
                     return;
                 }
-                if (saveFilesList != null) {
-                    saveFilesList.clear();
-                }
-                for (int i = 0; i < savePaths.size(); i++) {
-                    File file = new File(savePaths.get(i));
-                    if (file.exists()) {
-                        saveFilesList.add(file);
-                        Bitmap bitmap = ImageUtil.createBitmapFromPath(file.getAbsolutePath(), 1920, 1080);
-                        imgResult.setImageBitmap(bitmap);
-                        Toast.makeText(this,"显示涂鸦结果图",Toast.LENGTH_SHORT).show();
-                    }
-                }
-                imageListAdapter.initData(0, saveFilesList);//刷新列表数据
+                getSaveFilesList();//刷新列表数据
             } else if (resultCode == GraffitiActivity.RESULT_ERROR) {
                 ToastUtil.showMessage("onActivityResult发生错误");
             }

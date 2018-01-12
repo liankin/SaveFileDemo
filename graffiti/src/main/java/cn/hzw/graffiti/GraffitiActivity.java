@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +57,12 @@ public class GraffitiActivity extends Activity {
     private View mNextPage;
     private View mLostPage;
     private String mTitleName;
+    private LinearLayout layoutPenSize;
+    private LinearLayout layoutSignSize;
+    private SeekBar mSignSizeBar;
+    private TextView mSignSizeView;
+    private String mSignPath;
+    private File signFile;
 
     /**
      * 启动涂鸦界面
@@ -182,6 +189,8 @@ public class GraffitiActivity extends Activity {
         }
         mTitleName = mGraffitiParams.mTitleName;
         mImagePath = mGraffitiParams.mImagePath;
+        mSignPath = mGraffitiParams.mSignPath;
+        signFile = new File(mSignPath);
         if (mImagePath == null) {
             LogUtil.e("TAG", "mImagePath is null!");
             this.finish();
@@ -467,7 +476,7 @@ public class GraffitiActivity extends Activity {
     }
 
     private void createGraffitiBitmap(final GraffitiBitmap graffitiBitmap, final float x, final float y) {
-        Activity activity = this;
+       /* Activity activity = this;
 
         boolean fullScreen = (activity.getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) != 0;
         Dialog dialog = null;
@@ -503,7 +512,7 @@ public class GraffitiActivity extends Activity {
                 Bitmap bitmap = ImageUtils.createBitmapFromPath(pathList.get(0), mGraffitiView.getWidth() / 4, mGraffitiView.getHeight() / 4);
 
                 if (graffitiBitmap == null) {
-                    mGraffitiView.addSelectableItem(new GraffitiBitmap(mGraffitiView.getPen(), bitmap, mGraffitiView.getPaintSize(), mGraffitiView.getColor().copy(),
+                    mGraffitiView.addSelectableItem(new GraffitiBitmap(mGraffitiView.getPen(), bitmap, mSignSizeBar.getProgress(), mGraffitiView.getColor().copy(),
                             0, mGraffitiView.getGraffitiRotateDegree(), x, y, mGraffitiView.getOriginalPivotX(), mGraffitiView.getOriginalPivotY()));
                 } else {
                     graffitiBitmap.setBitmap(bitmap);
@@ -511,7 +520,17 @@ public class GraffitiActivity extends Activity {
                 mGraffitiView.invalidate();
             }
         });
-        selectorContainer.addView(selectorView);
+        selectorContainer.addView(selectorView);*/
+
+//-------------------------------
+        Bitmap bitmap = ImageUtils.createBitmapFromPath(mSignPath, mGraffitiView.getWidth() / 4, mGraffitiView.getHeight() / 4);
+        if (graffitiBitmap == null) {
+            mGraffitiView.addSelectableItem(new GraffitiBitmap(mGraffitiView.getPen(), bitmap, mSignSizeBar.getProgress(), mGraffitiView.getColor().copy(),
+                    0, mGraffitiView.getGraffitiRotateDegree(), x, y, mGraffitiView.getOriginalPivotX(), mGraffitiView.getOriginalPivotY()));
+        } else {
+            graffitiBitmap.setBitmap(bitmap);
+        }
+        mGraffitiView.invalidate();
     }
 
     private void initView() {
@@ -532,6 +551,8 @@ public class GraffitiActivity extends Activity {
         findViewById(R.id.graffiti_selectable_edit).setOnClickListener(mOnClickListener);
         findViewById(R.id.graffiti_selectable_remove).setOnClickListener(mOnClickListener);
         findViewById(R.id.graffiti_selectable_top).setOnClickListener(mOnClickListener);
+        layoutPenSize = (LinearLayout) findViewById(R.id.layout_pen_size);
+        layoutSignSize = (LinearLayout) findViewById(R.id.layout_sign_size);
         mShapeModeContainer = findViewById(R.id.bar_shape_mode);
         mSelectedTextEditContainer = findViewById(R.id.graffiti_selectable_edit_container);
         mEditContainer = findViewById(R.id.graffiti_edit_container);
@@ -574,7 +595,7 @@ public class GraffitiActivity extends Activity {
                 }
                 mPaintSizeView.setText("" + progress);
                 if (mGraffitiView.isSelectedItem()) {
-                    mGraffitiView.setSelectedItemSize(progress);
+                   // mGraffitiView.setSelectedItemSize(progress);
                 } else {
                     mGraffitiView.setPaintSize(progress);
                 }
@@ -586,7 +607,27 @@ public class GraffitiActivity extends Activity {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+        mSignSizeBar = (SeekBar) findViewById(R.id.sign_size);
+        mSignSizeView = (TextView) findViewById(R.id.sign_size_text);
+        mSignSizeBar.setMax(600);
+        mSignSizeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (progress == 0) {
+                    mSignSizeBar.setProgress(1);
+                    return;
+                }
+                if (mGraffitiView.isSelectedItem()) {
+                     mGraffitiView.setSelectedItemSize(progress);
+                }
+            }
 
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+        mSignSizeBar.setProgress(300);
         ScaleOnTouchListener onTouchListener = new ScaleOnTouchListener();
         findViewById(R.id.btn_amplifier).setOnTouchListener(onTouchListener);
         findViewById(R.id.btn_reduce).setOnTouchListener(onTouchListener);
@@ -750,33 +791,48 @@ public class GraffitiActivity extends Activity {
         public void onClick(View v) {
             mDone = false;
             if (v.getId() == R.id.btn_pen_hand) {
+                layoutPenSize.setVisibility(View.VISIBLE);
+                layoutSignSize.setVisibility(View.GONE);
                 mPaintSizeBar.setProgress((int) (mGraffitiView.getPaintSize() + 0.5f));
                 mShapeModeContainer.setVisibility(View.GONE);
                 mGraffitiView.setPen(GraffitiView.Pen.HAND);
                 mIsMovingPic =false;
                 mDone = true;
             } else if (v.getId() == R.id.btn_pen_copy) {
+                layoutPenSize.setVisibility(View.VISIBLE);
+                layoutSignSize.setVisibility(View.GONE);
                 mPaintSizeBar.setProgress((int) (mGraffitiView.getPaintSize() + 0.5f));
                 mShapeModeContainer.setVisibility(View.GONE);
                 mGraffitiView.setPen(GraffitiView.Pen.COPY);
                 mIsMovingPic =false;
                 mDone = true;
             } else if (v.getId() == R.id.btn_pen_eraser) {
+                layoutPenSize.setVisibility(View.VISIBLE);
+                layoutSignSize.setVisibility(View.GONE);
                 mPaintSizeBar.setProgress((int) (mGraffitiView.getPaintSize() + 0.5f));
                 mShapeModeContainer.setVisibility(View.GONE);
                 mGraffitiView.setPen(GraffitiView.Pen.ERASER);
                 mIsMovingPic =false;
                 mDone = true;
             } else if (v.getId() == R.id.btn_pen_text) {
+                layoutPenSize.setVisibility(View.VISIBLE);
+                layoutSignSize.setVisibility(View.GONE);
                 mShapeModeContainer.setVisibility(View.GONE);
                 mGraffitiView.setPen(GraffitiView.Pen.TEXT);
                 mIsMovingPic =false;
                 mDone = true;
             } else if (v.getId() == R.id.btn_pen_bitmap) {
+                if (!signFile.exists()) {
+                    Toast.makeText(GraffitiActivity.this, "您尚未录入签名", Toast.LENGTH_SHORT).show();
+                    return;
+                } else{
+                    layoutPenSize.setVisibility(View.GONE);
+                layoutSignSize.setVisibility(View.VISIBLE);
                 mShapeModeContainer.setVisibility(View.GONE);
                 mGraffitiView.setPen(GraffitiView.Pen.BITMAP);
-                mIsMovingPic =false;
+                mIsMovingPic = false;
                 mDone = true;
+            }
             }else if (v.getId() == R.id.btn_next_page){//下一页
                 pageChange(true);
             }else if (v.getId() == R.id.btn_lost_page){//上一页

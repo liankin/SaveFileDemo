@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.admin.savefiledemo.Constant;
 import com.example.admin.savefiledemo.R;
 import com.example.admin.savefiledemo.util.ToastUtil;
 import com.example.admin.savefiledemo.views.PaintStyleDialog;
@@ -54,7 +55,9 @@ public class ActTuYaMoreImage extends AppCompatActivity {
     RelativeLayout layoutMoveImage;
 
     private TuYaMoreView tuyaView = null;
-    private File fileDir;
+    private File readFileDir = Constant.getFileDir(Constant.GRAFFITY_SRC_FILE_PATH);
+    private String saveFileDirPath = Constant.getFileDir(Constant.GRAFFITY_DES_FILE_PATH).getAbsolutePath()
+            +"/第一个模板涂鸦结果";
     private PaintStyleDialog paintStyleDialog;
     private Paint paint = new Paint();
 
@@ -64,14 +67,8 @@ public class ActTuYaMoreImage extends AppCompatActivity {
         setContentView(R.layout.activity_act_tuyamoreimage);
         ButterKnife.bind(this);
         btnPaint.setVisibility(View.GONE);
-        File sdDir = Environment.getExternalStorageDirectory();
-        fileDir = new File(sdDir.getPath() + "/SAVEFILEDEMO/IMG");
-        if (!fileDir.exists()) {
-            // 必须要先有父文件夹才能在父文件夹下建立想要的子文件夹
-            // 即LIMS文件必须存在，才能建立IMG文件夹
-            fileDir.mkdir();
-        }
-        String folderPath = fileDir.getAbsolutePath() + "/第一个模板";
+
+        String folderPath = readFileDir.getAbsolutePath() + "/第一个模板";
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         tuyaView = new TuYaMoreView(ActTuYaMoreImage.this, folderPath);
@@ -143,13 +140,16 @@ public class ActTuYaMoreImage extends AppCompatActivity {
                 tvImageIndex.setText("当前:" + (tuyaView.getCurrentFileIndex() + 1) + "/" + tuyaView.getSrcFileList().size());
                 break;
             case R.id.btn_save://保存
-                tuyaView.saveResultImage();
+                tuyaView.saveResultImage(saveFileDirPath);
                 break;
             case R.id.btn_clear_all://清屏
                 tuyaView.cleanGraffity();
                 break;
             case R.id.btn_add_image://贴图
-                tuyaView.openAddImageMode(fileDir.getAbsolutePath() + "/风景.jpg");
+                File file = new File(readFileDir.getAbsolutePath() + "/image1.jpg");
+                if(file.exists()){
+                    tuyaView.openAddImageMode(readFileDir.getAbsolutePath() + "/image1.jpg");
+                }
                 break;
             case R.id.btn_paint_style://画笔样式
                 setPaintStyle();

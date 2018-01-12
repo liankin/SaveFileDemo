@@ -325,12 +325,7 @@ public class GraffitiView extends View {
                     mLastTouchY = mTouchY;
                     mTouchX = event.getX();
                     mTouchY = event.getY();
-                    mCurrPath.quadTo(
-                            toX(mLastTouchX),
-                            toY(mLastTouchY),
-                            toX((mTouchX + mLastTouchX) / 2),
-                            toY((mTouchY + mLastTouchY) / 2));
-                    /*if (isPenSelectable()) {
+                    if (isPenSelectable()) {
                         if (mIsRotatingSelectedItem) {
                             float[] xy = mSelectedItem.getXy(mGraffitiRotateDegree);
                             mSelectedItem.setItemRotate(mRotateTextDiff + computeAngle(
@@ -344,8 +339,27 @@ public class GraffitiView extends View {
                             }
                         }
                     } else {
+                        if (mPen == Pen.COPY && mCopyLocation.isRelocating()) {
+                            // 正在定位location
+                            mCopyLocation.updateLocation(toX(mTouchX), toY(mTouchY));
+                        } else {
+                            if (mPen == Pen.COPY) {
+                                mCopyLocation.updateLocation(mCopyLocation.getCopyStartX() + toX(mTouchX) - mCopyLocation.getTouchStartX(),
+                                        mCopyLocation.getCopyStartY() + toY(mTouchY) - mCopyLocation.getTouchStartY());
+                            }
+                            if (mShape == Shape.HAND_WRITE) { // 手写
+                                mCurrPath.quadTo(
+                                        toX(mLastTouchX),
+                                        toY(mLastTouchY),
+                                        toX((mTouchX + mLastTouchX) / 2),
+                                        toY((mTouchY + mLastTouchY) / 2));
+                            } else { // 画图形
 
-                    }*/
+                            }
+                        }
+                    }
+                } else { // 多点
+
                 }
 
                 invalidate();
@@ -490,8 +504,7 @@ public class GraffitiView extends View {
         // 画布和图片共用一个坐标系，只需要处理屏幕坐标系到图片（画布）坐标系的映射关系
         canvas.scale(mPrivateScale * mScale, mPrivateScale * mScale); // 缩放画布
         canvas.translate(left, top); // 偏移画布
-        //设置画布背景色
-        //canvas.drawColor(0xff000000);
+
         canvas.save();
         if (!mIsDrawableOutside) { // 裁剪绘制区域为图片区域
             canvas.clipRect(0, 0, mBitmap.getWidth(), mBitmap.getHeight());
@@ -504,13 +517,6 @@ public class GraffitiView extends View {
 
         // 绘制涂鸦
         canvas.drawBitmap(mGraffitiBitmap, 0, 0, null);
-
-        //canvas.drawRect(left, top, right, bottom, paint);
-        Paint paint = new Paint();
-        paint.setColor(Color.RED);
-        paint.setStyle(Paint.Style.STROKE);//不填充
-        paint.setStrokeWidth(10);  //线的宽度
-        canvas.drawRect(0, 0, mGraffitiBitmap.getWidth(), mGraffitiBitmap.getHeight(), paint);
 
         if (mIsPainting) {  //画在view的画布上
             Path path;
@@ -765,8 +771,7 @@ public class GraffitiView extends View {
         if (mGraffitiBitmap != null) {
             mGraffitiBitmap.recycle();
         }
-        //复制mBitmap为mGraffitiBitmap，用于涂鸦
-        mGraffitiBitmap = mBitmap.copy(Bitmap.Config.ARGB_8888, true);
+        mGraffitiBitmap = mBitmap.copy(Bitmap.Config.RGB_565, true);
         mBitmapCanvas = new Canvas(mGraffitiBitmap);
     }
 

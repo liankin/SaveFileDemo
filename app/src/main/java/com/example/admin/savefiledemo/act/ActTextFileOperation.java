@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.admin.savefiledemo.Constant;
 import com.example.admin.savefiledemo.R;
 import com.example.admin.savefiledemo.util.FileUtil;
 import com.example.admin.savefiledemo.util.ToastUtil;
@@ -29,7 +30,7 @@ import butterknife.OnClick;
 /**
  * txt文本文件：
  * 使用FileUtil，对文本文件的操作进行了封装
- * Created by admin on 2017/11/21.
+ * 相对路径保存、读取；
  */
 
 public class ActTextFileOperation extends AppCompatActivity {
@@ -53,10 +54,7 @@ public class ActTextFileOperation extends AppCompatActivity {
     @BindView(R.id.tv_read_text)
     TextView tvReadText;
 
-    private static final String FILE_NAME = "mytextdata";
-
-    private static final File SD_DIR = Environment.getExternalStorageDirectory();
-    private static final File FILES_DIR = new File(SD_DIR.getPath() + "/SAVEFILEDEMO/TEXTFILE");//文件保存路径
+    private static final String FILE_NAME = Constant.TXT_FILE_NAME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

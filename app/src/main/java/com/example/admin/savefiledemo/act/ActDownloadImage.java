@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.admin.savefiledemo.Constant;
 import com.example.admin.savefiledemo.R;
 import com.example.admin.savefiledemo.util.ImageUtil;
 import com.example.admin.savefiledemo.util.ToastUtil;
@@ -60,8 +61,7 @@ public class ActDownloadImage extends AppCompatActivity {
     @BindView(R.id.btn_list_image)
     Button btnListImage;
 
-    public static String imgUrl = "http://pic1.win4000.com/wallpaper/8/575e50b24e386.jpg";
-    private File fileDir;
+    private String saveFileDirPath = Constant.getFileDir(Constant.IMAGE_FILE_PATH).getAbsolutePath();
     private String saveFilePath;
     private Bitmap mBitmap;
 
@@ -81,15 +81,7 @@ public class ActDownloadImage extends AppCompatActivity {
         setContentView(R.layout.activity_act_image);
         ButterKnife.bind(this);
 
-        // Environment.getExternalStorageDirectory()获取外部存储的根路径，
-        // 返回的路径中最后一个字符不是/，如果需要创建子目录，需要在子目录的前后都加上/
-        File sdDir = Environment.getExternalStorageDirectory();
-        fileDir = new File(sdDir.getPath() + "/SAVEFILEDEMO/IMG");
-        if (!fileDir.exists()) {
-            // 必须要先有父文件夹才能在父文件夹下建立想要的子文件夹
-            // 即LIMS文件必须存在，才能建立IMG文件夹
-            fileDir.mkdir();
-        }
+
         // 获取外部存储状态
         String state = Environment.getExternalStorageState();
         // 如果状态不是mounted，无法读写
@@ -127,7 +119,7 @@ public class ActDownloadImage extends AppCompatActivity {
      */
     public void useXGetInternetImage() {
 //            x.image().bind(img, imgUrl);
-        x.image().bind(img, imgUrl, new Callback.CommonCallback<Drawable>() {
+        x.image().bind(img, Constant.IMG_URL, new Callback.CommonCallback<Drawable>() {
             @Override
             public void onSuccess(Drawable result) {
                 ToastUtil.showMessage("加载图片成功");
@@ -210,7 +202,7 @@ public class ActDownloadImage extends AppCompatActivity {
                 .setLoadingDrawableId(R.mipmap.ic_launcher)//加载中的图片
                 .setFailureDrawableId(R.mipmap.ic_launcher)//默认的图片
                 .build();
-        x.image().loadDrawable(imgUrl, imageOptions, new Callback.CommonCallback<Drawable>() {
+        x.image().loadDrawable(Constant.IMG_URL, imageOptions, new Callback.CommonCallback<Drawable>() {
             @Override
             public void onSuccess(Drawable result) {
                 BitmapDrawable bd = (BitmapDrawable) result;
@@ -268,9 +260,9 @@ public class ActDownloadImage extends AppCompatActivity {
 
         SimpleDateFormat time = new SimpleDateFormat("yyyyMMddHHmmss");
         String fileName = time.format(System.currentTimeMillis());
-        saveFilePath = fileDir.getAbsolutePath() + "/" + fileName + ".jpg";
+        saveFilePath = saveFileDirPath + "/" + fileName + ".jpg";
         //File.getAbsolutePath()获得文件绝对路径
-        RequestParams requestParams = new RequestParams(imgUrl);
+        RequestParams requestParams = new RequestParams(Constant.IMG_URL);
         requestParams.setSaveFilePath(saveFilePath);
         x.http().get(requestParams, new Callback.CommonCallback<File>() {
             @Override

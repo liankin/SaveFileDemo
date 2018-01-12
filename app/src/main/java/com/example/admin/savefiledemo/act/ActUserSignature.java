@@ -1,16 +1,21 @@
 package com.example.admin.savefiledemo.act;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
+import com.example.admin.savefiledemo.Constant;
 import com.example.admin.savefiledemo.R;
+import com.example.admin.savefiledemo.util.ToastUtil;
 import com.example.admin.savefiledemo.views.SignaturePngView;
 
 import java.io.File;
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +33,11 @@ public class ActUserSignature extends AppCompatActivity {
     Button btnSaveImage;
     @BindView(R.id.signature_png_view)
     SignaturePngView signaturePngView;
+    @BindView(R.id.iv_mysign)
+    ImageView ivMysign;
+
+    private File fileDir = Constant.getFileDir(Constant.SIGNAYURE_FILE_PATH);
+    private String fileUrl = fileDir.getAbsolutePath() +"/" + Constant.SIGNATURE_FILE_NAME;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,16 +45,10 @@ public class ActUserSignature extends AppCompatActivity {
         setContentView(R.layout.activity_act_usersignature);
         ButterKnife.bind(this);
 
-        File sdDir = Environment.getExternalStorageDirectory();
-        File fileDir = new File(sdDir.getPath() + "/SAVEFILEDEMO/TUYA");
-        if (!fileDir.exists()) {
-            // 必须要先有父文件夹才能在父文件夹下建立想要的子文件夹
-            // 即LIMS文件必须存在，才能建立IMG文件夹
-            fileDir.mkdir();
-        }
-        String fileUrl = fileDir.getAbsolutePath()+"/个人签名.png";
         File file = new File(fileUrl);
-        signaturePngView.setResultImageFile(file);
+        if (file.exists()){
+            ivMysign.setImageBitmap(BitmapFactory.decodeFile(fileUrl));
+        }
     }
 
     @OnClick({R.id.btn_clean_all, R.id.btn_save_image})
@@ -54,9 +58,21 @@ public class ActUserSignature extends AppCompatActivity {
                 signaturePngView.cleanAll();
                 break;
             case R.id.btn_save_image:
-                signaturePngView.saveResultImage();
+                try {
+                    signaturePngView.saveResultImage(fileUrl, true, 10);
+                    ToastUtil.showMessage("保存结束");
+                    ivMysign.setImageBitmap(signaturePngView.getmBitmap());
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
 

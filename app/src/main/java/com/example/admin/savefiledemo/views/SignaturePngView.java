@@ -23,12 +23,11 @@ import java.util.List;
  */
 public class SignaturePngView extends View {
 
-    public void setResultImageFile(File resultImageFile) {
-        this.resultImageFile = resultImageFile;
+    public Bitmap getmBitmap() {
+        return mBitmap;
     }
 
-    private File resultImageFile;//保存涂鸦结果图片的对象//GraffitiPngView  SignaturePngView
-
+    private Bitmap mBitmap;//结果图片
     private Paint paint;
     private Path path;
     private float downX,downY;
@@ -36,6 +35,13 @@ public class SignaturePngView extends View {
     private  int paintWidth = 10;//画笔大小
     private List<DrawPath> drawPathList;//保存当前绘制的所有画笔路径
     private List<DrawPath> savePathList;//保存撤销的所有画笔路径
+
+    /**
+     * 前景色
+     */
+    private int mPenColor = Color.BLACK;
+
+    private int mBackColor=Color.TRANSPARENT;
 
     //画笔路径对象
     private class DrawPath {
@@ -64,7 +70,7 @@ public class SignaturePngView extends View {
         paint.setAntiAlias(true);
         paint.setStrokeWidth(paintWidth);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.RED);
+        paint.setColor(mPenColor);
     }
 
     @Override
@@ -164,20 +170,23 @@ public class SignaturePngView extends View {
     }
 
     /**
-     * 保存涂鸦结果图片
+     * 保存画板
+     *
+     * @param path       保存到路劲
+     * @param clearBlank 是否清楚空白区域
+     * @param blank  边缘空白区域
      */
-    public void saveResultImage(){
-        if(resultImageFile == null){
-            return;
-        }
+    public void saveResultImage(String path, boolean clearBlank, int blank) throws IOException {
         // 生成与此控件View一样宽高的Bitmap
         // 若使背景为透明，必须设置为Bitmap.Config.ARGB_4444
-        Bitmap mBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        mBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
         Canvas mCanvas = new Canvas(mBitmap);
         for(int i=0;i<drawPathList.size();i++){
             mCanvas.drawPath(drawPathList.get(i).path, drawPathList.get(i).paint);
         }
-
+        if(clearBlank){
+            mBitmap = clearBlank(mBitmap, blank);
+        }
 //        File sdDir = Environment.getExternalStorageDirectory();
 //        File fileDir = new File(sdDir.getPath() + "/SAVEFILEDEMO/TUYA");
 //        if (!fileDir.exists()) {
@@ -187,7 +196,7 @@ public class SignaturePngView extends View {
 //        }
 //        String fileUrl = fileDir.getAbsolutePath()+"/个人签名.png";
         try {
-            FileOutputStream fos = new FileOutputStream(resultImageFile);
+            FileOutputStream fos = new FileOutputStream(new File(path));
             mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();
@@ -196,7 +205,86 @@ public class SignaturePngView extends View {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ToastUtil.showMessage("保存结束");
+    }
+
+    /**
+     * 逐行扫描 清楚边界空白。
+     *
+     * @param bp
+     * @param blank 边距留多少个像素
+     * @return
+     */
+    private Bitmap clearBlank(Bitmap bp, int blank) {
+        int HEIGHT = bp.getHeight();
+        int WIDTH = bp.getWidth();
+        int top = 0, left = 0, right = 0, bottom = 0;
+        int[] pixs = new int[WIDTH];
+        boolean isStop;
+        for (int y = 0; y < HEIGHT; y++) {
+            bp.getPixels(pixs, 0, WIDTH, 0, y, WIDTH, 1);
+            isStop = false;
+            for (int pix : pixs) {
+                if (pix != mBackColor) {
+                    top = y;
+                    isStop = true;
+                    break;
+                }
+            }
+            if (isStop) {
+                break;
+            }
+        }
+        for (int y = HEIGHT - 1; y >= 0; y--) {
+            bp.getPixels(pixs, 0, WIDTH, 0, y, WIDTH, 1);
+            isStop = false;
+            for (int pix : pixs) {
+                if (pix != mBackColor) {
+                    bottom = y;
+                    isStop = true;
+                    break;
+                }
+            }
+            if (isStop) {
+                break;
+            }
+        }
+        pixs = new int[HEIGHT];
+        for (int x = 0; x < WIDTH; x++) {
+            bp.getPixels(pixs, 0, 1, x, 0, 1, HEIGHT);
+            isStop = false;
+            for (int pix : pixs) {
+                if (pix != mBackColor) {
+                    left = x;
+                    isStop = true;
+                    break;
+                }
+            }
+            if (isStop) {
+                break;
+            }
+        }
+        for (int x = WIDTH - 1; x > 0; x--) {
+            bp.getPixels(pixs, 0, 1, x, 0, 1, HEIGHT);
+            isStop = false;
+            for (int pix : pixs) {
+                if (pix != mBackColor) {
+                    right = x;
+                    isStop = true;
+                    break;
+                }
+            }
+            if (isStop) {
+                break;
+            }
+        }
+        if (blank < 0) {
+            blank = 0;
+        }
+        left = left - blank > 0 ? left - blank : 0;
+        top = top - blank > 0 ? top - blank : 0;
+        right = right + blank > WIDTH - 1 ? WIDTH - 1 : right + blank;
+        bottom = bottom + blank > HEIGHT - 1 ? HEIGHT - 1 : bottom + blank;
+        return Bitmap.createBitmap(bp, left, top, right - left, bottom - top);
     }
 
 }

@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.example.admin.savefiledemo.Constant;
 import com.example.admin.savefiledemo.R;
 import com.example.admin.savefiledemo.views.TuyaView;
 
@@ -42,21 +43,15 @@ public class ActMoveImage extends AppCompatActivity {
     TextView btnAddImage;
 
     private TuyaView tuyaView = null;
-    private File fileDir;
-
+    private File readFileDir = Constant.getFileDir(Constant.GRAFFITY_SRC_FILE_PATH);
+    private File saveFileDir = Constant.getFileDir(Constant.GRAFFITY_DES_FILE_PATH);
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_act_moveimage);
         ButterKnife.bind(this);
-        File sdDir = Environment.getExternalStorageDirectory();
-        fileDir = new File(sdDir.getPath() + "/SAVEFILEDEMO/IMG");
-        if (!fileDir.exists()) {
-            // 必须要先有父文件夹才能在父文件夹下建立想要的子文件夹
-            // 即LIMS文件必须存在，才能建立IMG文件夹
-            fileDir.mkdir();
-        }
-        String imagePath = fileDir.getAbsolutePath() + "/百变小樱.jpeg";
+
+        String imagePath = readFileDir.getAbsolutePath() + "/image1.jpg";
         File file = new File(imagePath);
         if(file.exists()){
             DisplayMetrics dm = new DisplayMetrics();
@@ -66,55 +61,6 @@ public class ActMoveImage extends AppCompatActivity {
         }
     }
 
-    /**
-     * 计算两个手指间的距离
-     */
-    private float distance(MotionEvent event) {
-        float dx = event.getX(1) - event.getX(0);
-        float dy = event.getY(1) - event.getY(0);
-        /** 使用勾股定理返回两点之间的距离 */
-        return (float) Math.sqrt(dx * dx + dy * dy);
-    }
-
-    /**
-     * 计算两个手指间的中间点
-     */
-    private PointF mid(MotionEvent event) {
-        float midX = (event.getX(1) + event.getX(0)) / 2;
-        float midY = (event.getY(1) + event.getY(0)) / 2;
-        return new PointF(midX, midY);
-    }
-
-    /**
-     * 计算出图片初次显示需要放大倍数
-     */
-    public float getInitImageScale(Bitmap bitmap) {
-        WindowManager wm = this.getWindowManager();
-        int width = wm.getDefaultDisplay().getWidth();
-        int height = wm.getDefaultDisplay().getHeight();
-        // 拿到图片的宽和高
-        int dw = bitmap.getWidth();
-        int dh = bitmap.getHeight();
-        float scale = 1.0f;
-        //图片宽度大于屏幕，但高度小于屏幕，则缩小图片至填满屏幕宽
-        if (dw > width && dh <= height) {
-            scale = width * 1.0f / dw;
-        }
-        //图片宽度小于屏幕，但高度大于屏幕，则放大图片至填满屏幕宽
-        if (dw <= width && dh > height) {
-            scale = width * 1.0f / dw;
-        }
-        //图片高度和宽度都小于屏幕，则放大图片至填满屏幕宽
-        if (dw < width && dh < height) {
-            scale = width * 1.0f / dw;
-        }
-        //图片高度和宽度都大于屏幕，则缩小图片至填满屏幕宽
-        if (dw > width && dh > height) {
-            scale = width * 1.0f / dw;
-        }
-        return scale;
-    }
-
     @OnClick({R.id.btn_revocation, R.id.btn_save, R.id.btn_clear_all, R.id.btn_add_image})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -122,13 +68,16 @@ public class ActMoveImage extends AppCompatActivity {
                 tuyaView.revocationGraffity();
                 break;
             case R.id.btn_save:
-                tuyaView.saveResultImage();
+                tuyaView.saveResultImage(saveFileDir.getAbsolutePath()+"/image1_1.png");
                 break;
             case R.id.btn_clear_all:
                 tuyaView.cleanGraffity();
                 break;
             case R.id.btn_add_image:
-                tuyaView.openAddImage(fileDir.getAbsolutePath() + "/风景.jpg");
+                File file = new File(readFileDir.getAbsolutePath() + "/image2.jpg");
+                if(file.exists()){
+                    tuyaView.openAddImage(readFileDir.getAbsolutePath() + "/image2.jpg");
+                }
                 break;
         }
     }
