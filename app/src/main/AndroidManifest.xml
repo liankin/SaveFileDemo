@@ -30,6 +30,7 @@
         <activity android:name=".act.ActTuYaMoreImage"/>
         <activity android:name=".act.ActGraffityImage"/>
         <activity android:name=".act.ActMySign"/>
+        <activity android:name=".act.ActReadPdf"/>
     </application>
 
 </manifest>

@@ -60,7 +60,7 @@ public class ActImageFileOperation extends AppCompatActivity {
     private List<File> filesList = new ArrayList<>();//文件夹里的所有文件
     private ImageListAdapter imageListAdapter;
 
-    private static final File FILES_DIR = Constant.getFileDir(Constant.IMAGE_FILE_PATH);//文件保存路径
+    private static final File FILES_DIR = Constant.getFolderDir(Constant.IMAGE_FILE_PATH);//文件保存路径
 
     private static String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,

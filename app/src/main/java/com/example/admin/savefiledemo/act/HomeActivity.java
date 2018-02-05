@@ -38,6 +38,8 @@ public class HomeActivity extends AppCompatActivity {
     Button btnUserSignature;
     @BindView(R.id.btn_my_signature)
     Button btnMySignature;
+    @BindView(R.id.btn_read_pdf)
+    Button btnReadPdf;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,12 +49,16 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.btn_user_signature,
+    @OnClick({R.id.btn_read_pdf, R.id.btn_user_signature,
             R.id.btn_my_signature, R.id.btn_download_image, R.id.btn_image_list, R.id.btn_image_operation,
             R.id.btn_file_operation, R.id.btn_move_image, R.id.btn_tu_ya_more_image, R.id.btn_graffti_more_image})
     public void onViewClicked(View view) {
         Intent intent;
         switch (view.getId()) {
+            case R.id.btn_read_pdf:
+                intent = new Intent(HomeActivity.this,ActReadPdf.class);
+                startActivity(intent);
+                break;
             case R.id.btn_user_signature:
                 intent = new Intent(HomeActivity.this, ActUserSignature.class);
                 startActivity(intent);

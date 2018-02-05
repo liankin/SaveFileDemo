@@ -32,7 +32,7 @@ public class ActMySign extends AppCompatActivity {
     @BindView(R.id.iv_mysign)
     ImageView ivMysign;
 
-    private File fileDir = Constant.getFileDir(Constant.SIGNAYURE_FILE_PATH);
+    private File fileDir = Constant.getFolderDir(Constant.SIGNAYURE_FILE_PATH);
     private String path = fileDir.getAbsolutePath() +"/" + Constant.SIGNATURE_FILE_NAME;
 
     @Override

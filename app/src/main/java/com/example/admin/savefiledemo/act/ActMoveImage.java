@@ -43,8 +43,8 @@ public class ActMoveImage extends AppCompatActivity {
     TextView btnAddImage;
 
     private TuyaView tuyaView = null;
-    private File readFileDir = Constant.getFileDir(Constant.GRAFFITY_SRC_FILE_PATH);
-    private File saveFileDir = Constant.getFileDir(Constant.GRAFFITY_DES_FILE_PATH);
+    private File readFileDir = Constant.getFolderDir(Constant.GRAFFITY_SRC_FILE_PATH);
+    private File saveFileDir = Constant.getFolderDir(Constant.GRAFFITY_DES_FILE_PATH);
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

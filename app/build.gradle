@@ -55,4 +55,5 @@ dependencies {
     compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.5.0'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile(name:'app-debug', ext:'aar')
+    compile 'com.github.barteksc:android-pdf-viewer:2.8.2'
 }

@@ -46,9 +46,9 @@ public class ActGraffityImage extends AppCompatActivity {
     private List<File> saveFilesList = new ArrayList<>();
     private GraffityImageAdapter imageListAdapter;
 
-    private static final File READ_FILES_DIR = Constant.getFileDir(Constant.GRAFFITY_SRC_FILE_PATH);
-    private static final File SAVE_FILES_DIR = Constant.getFileDir(Constant.GRAFFITY_DES_FILE_PATH);
-    private static final String signatureImagePath = Constant.getFileDir(Constant.SIGNAYURE_FILE_PATH).getAbsolutePath()
+    private static final File READ_FILES_DIR = Constant.getFolderDir(Constant.GRAFFITY_SRC_FILE_PATH);
+    private static final File SAVE_FILES_DIR = Constant.getFolderDir(Constant.GRAFFITY_DES_FILE_PATH);
+    private static final String signatureImagePath = Constant.getFolderDir(Constant.SIGNAYURE_FILE_PATH).getAbsolutePath()
             +"/" + Constant.SIGNATURE_FILE_NAME;
     public static final int REQUEST_GRAFFITI = 22;
 

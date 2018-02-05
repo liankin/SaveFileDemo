@@ -55,8 +55,8 @@ public class ActTuYaMoreImage extends AppCompatActivity {
     RelativeLayout layoutMoveImage;
 
     private TuYaMoreView tuyaView = null;
-    private File readFileDir = Constant.getFileDir(Constant.GRAFFITY_SRC_FILE_PATH);
-    private String saveFileDirPath = Constant.getFileDir(Constant.GRAFFITY_DES_FILE_PATH).getAbsolutePath()
+    private File readFileDir = Constant.getFolderDir(Constant.GRAFFITY_SRC_FILE_PATH);
+    private String saveFileDirPath = Constant.getFolderDir(Constant.GRAFFITY_DES_FILE_PATH).getAbsolutePath()
             +"/第一个模板涂鸦结果";
     private PaintStyleDialog paintStyleDialog;
     private Paint paint = new Paint();

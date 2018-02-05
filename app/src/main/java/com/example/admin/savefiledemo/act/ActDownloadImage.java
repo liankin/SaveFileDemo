@@ -61,7 +61,7 @@ public class ActDownloadImage extends AppCompatActivity {
     @BindView(R.id.btn_list_image)
     Button btnListImage;
 
-    private String saveFileDirPath = Constant.getFileDir(Constant.IMAGE_FILE_PATH).getAbsolutePath();
+    private String saveFileDirPath = Constant.getFolderDir(Constant.IMAGE_FILE_PATH).getAbsolutePath();
     private String saveFilePath;
     private Bitmap mBitmap;
 

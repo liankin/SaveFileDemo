@@ -24,6 +24,9 @@ public class Constant {
     public static final String SIGNAYURE_FILE_PATH = "/mySignature";//签名结果图保存的文件夹名字
     public static final String SIGNATURE_FILE_NAME = "个人签名.png";//txt文本文件的名字
 
+    public static final String PDF_FILE_PATH = "/myPDF";//签名结果图保存的文件夹名字
+    public static final String PDF_FILE_NAME = "故乡的年味.pdf";//pdf文件的名字
+
     public static final String GRAFFITY_SRC_FILE_PATH = "/graffity/graffitySrcImage";//涂鸦源图保存的文件夹名字
     public static final String GRAFFITY_DES_FILE_PATH = "/graffity/graffityDesImage";//涂鸦结果图保存的文件夹名字
 
@@ -34,14 +37,14 @@ public class Constant {
      * @param folderName
      * @return
      */
-    public static File getFileDir(String folderName){
-        File fileDir = new File(SD_DIR.getAbsoluteFile() + DIR_FILE_PATH + folderName);
-        if (!fileDir.exists()) {
+    public static File getFolderDir(String folderName){
+        File folderDir = new File(SD_DIR.getAbsoluteFile() + DIR_FILE_PATH + folderName);
+        if (!folderDir.exists()) {
             // 必须要先有父文件夹才能在父文件夹下建立想要的子文件夹
             // 即LIMS文件必须存在，才能建立IMG文件夹
-            fileDir.mkdir();
+            folderDir.mkdir();
         }
-        return fileDir;
+        return folderDir;
     }
 
 }
